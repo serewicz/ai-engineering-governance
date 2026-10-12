@@ -56,7 +56,7 @@ These were verified against the project snapshot and live settings on the review
 Main currently requires strict Python 3.10/3.11/3.12 checks, resolved conversations, stale approval dismissal and administrator enforcement; force pushes/deletion are disabled. Preserve these. Token scopes, bypass actors and historical compliance were not audited; protection alone does not prove Tim is the only credential holder capable of merging.
 
 ## Migration and validation plan
-1. Tim approves candidate semantics, project precedence/revision, classifier delegation, three-cycle deviation, and publication boundaries. The user task authorizes preparation, not activation or publication.
+1. Tim confirms the final candidate review dispositions and approves project precedence/revision, classifier delegation, three-cycle deviation, and publication boundaries. The user task authorizes preparation, not activation or publication.
 2. Complete independent Tier 2 governance review and re-review each changed head. Tim decides governance merge and separately authorizes release; verify and record the final v1.1.0 tag and release SHA.
 3. Prepare a separate isolated HarvestGuard adoption branch only after authorization. Preserve all local uncommitted work; recheck remote main and live settings. Copy the core documents from the exact released commit, customize configuration, add provenance and retained controls, and reconcile instructions/contracts/YAML. Do not use unapproved candidate text as an active policy.
 4. Address approved enforcement changes in bounded reviewed PRs. Governance/workflow changes require independent principal and designated security evaluation and human approval. No live settings change is bundled silently.
@@ -64,7 +64,7 @@ Main currently requires strict Python 3.10/3.11/3.12 checks, resolved conversati
 6. Tim approves activation after required changes pass or explicitly records permitted temporary exceptions with owner, rationale, expiry/review date, and manual mitigation. Mandatory upstream controls cannot simply be waived by a tier. Record adoption date and final project revision.
 
 ## Unresolved risks and approval actions
-- Resolve the upstream semantic-version conflict: universal human-only merge strengthens a gate that v1.0.0 left to project policy. The 1.1.0 label is provisional; confirm the baseline interpretation or select a MAJOR version before merge/publication. Update this proposal and its pin to the separately approved release identity.
+- Version decision resolved: retain v1.1.0 with v1.0.0 Owner-approved project merge authority. The reusable policy permits explicitly bounded delegation for other projects; HarvestGuard retains mandatory human-only merge and no automated merge delegation. Separate merge/release/adoption approvals remain pending.
 - Approve or reject retaining 3 correction cycles; prior project code records authorization but the new adoption deviation still needs an adoption record.
 - Confirm role assignments and any classifier delegation; do not infer new permissions from role names.
 - Decide enforceable principal/security readiness and spec authorization mechanism.

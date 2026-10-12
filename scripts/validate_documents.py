@@ -49,8 +49,8 @@ def validate():
                 failures.append(f"Sensitive token or local path pattern: {path.relative_to(ROOT)}")
     # These are limited structural assertions, not proof of semantic equivalence.
     expected = {
-        "AI_ENGINEERING_GOVERNANCE.md": ("**Version:** 1.1.0", "## Non-negotiable controls", "### Tier 0", "### Tier 1", "### Tier 2", "Every task starts at **Tier 2**", "human-only", "`IMPORTANT`", "## Release gate", "MINOR adds compatible procedures", "Unresolved version decision"),
-        "AGENT_WORKFLOW.md": ("1.1.0 candidate", "start at Tier 2", "cycle 0", "two corrections", "three corrections", "human-only", "justified `NOT REQUIRED`"),
+        "AI_ENGINEERING_GOVERNANCE.md": ("**Version:** 1.1.0", "## Non-negotiable controls", "### Tier 0", "### Tier 1", "### Tier 2", "Every task starts at **Tier 2**", "Owner determines merge authority", "`IMPORTANT`", "## Release gate", "MINOR adds compatible procedures", "## Project merge authorization and delegation", "no universal human-only merge gate"),
+        "AGENT_WORKFLOW.md": ("1.1.0 candidate", "start at Tier 2", "cycle 0", "two corrections", "three corrections", "Owner-approved project policy", "justified `NOT REQUIRED`"),
         "PROJECT_AGENT_CONFIG.md": ("Reusable template", "1.1.0 candidate", "adoption inactive", "exact commit", "independent of builder", "Deviation register", "initial review is cycle 0"),
         "AGENT_HANDOFF_TEMPLATE.md": ("1.1.0 candidate", "Positive eligibility evidence", "Reviewed exact SHA", "Security disposition", "IMPORTANT", "Separate release/publication authorization"),
         "README.md": ("v1.1.0", "not a published release", "bb08e871568f953f36e061d7fd89e467598bdcac"),
@@ -61,6 +61,15 @@ def validate():
         for phrase in phrases:
             if phrase.lower() not in texts.get(name, "").lower():
                 failures.append(f"Missing invariant phrase in {name}: {phrase}")
+    # Active reusable guidance must not revive the superseded universal gate.
+    for name in ("AI_ENGINEERING_GOVERNANCE.md", "AGENT_WORKFLOW.md", "README.md", "TIER_ROUTING.md"):
+        for obsolete in ("Merge remains human-only", "Retain human-only merge authority", "Human-only merge and every mandatory control", "Unresolved version decision", "label is provisional"):
+            if obsolete.lower() in texts.get(name, "").lower():
+                failures.append(f"Superseded gate/version language in {name}: {obsolete}")
+    contract = texts.get("AI_ENGINEERING_GOVERNANCE.md", "")
+    for phrase in ("approved project policy", "bounded automated", "independent review", "exact PR head SHA", "required successful checks", "stop execution and escalate", "HarvestGuard's human-only merge requirement is mandatory"):
+        if phrase not in contract:
+            failures.append(f"Missing merge authority safeguard: {phrase}")
     return failures
 
 

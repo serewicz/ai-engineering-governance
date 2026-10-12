@@ -25,7 +25,8 @@
 - Risk class and sensitive assets: [DETAILS; CLASSIFY EACH TASK]
 
 ## Assignments
-- Owner / CTO, merge and release authority: [HUMAN]
+- Owner / CTO, final policy and release authority: [HUMAN]
+- Merge executor/authority: [HUMAN-ONLY OR BOUNDED AUTOMATION UNDER EXPLICIT OWNER-APPROVED POLICY; HARVESTGUARD IS HUMAN-ONLY]
 - Architect / advisor: [AGENT OR AUTHORIZED SUBSTITUTE]
 - Builder: [AGENT]
 - Independent principal reviewer: [AGENT]
@@ -38,6 +39,8 @@
 - CI/test matrix: [COMMANDS, ENVIRONMENTS, REQUIRED CHECKS]
 - Applicable container/package/security checks: [TRIGGERS AND CHECKS]
 - Branch/PR and isolation policy: [RULES]
+- Merge delegation: [NONE OR OWNER-APPROVED POLICY REVISION, APPROVAL EVIDENCE, EXECUTOR, BRANCH/SCOPE LIMITS, DURATION/REVOCATION, CREDENTIAL LIMITS, AND ESCALATION OWNER]
+- Merge execution gate: independently verify reviewed/current exact SHA, successful required checks, independent approval, security disposition, atomic stale-head guard, and retained project safeguards; record final SHA. Uncertain, stale, failed, missing or out-of-scope evidence blocks execution. Delegation never authorizes self-approval, policy changes, risk acceptance or publication.
 - Protected governance paths: [CONTRACT, CONFIGURATION, POLICY, WORKFLOWS, ENFORCEMENT CODE]
 - Credential/deployment permissions: [LIMITS; HUMAN-CONTROLLED]
 - Security review recording: [EXACT-SHA DISPOSITION AND LOCATION]

@@ -40,7 +40,10 @@
 - Evidence gaps / follow-up owner:
 
 ## Final authorization and closure
-- Owner merge authorization / exact SHA / evidence:
+- Owner-approved merge policy revision / approval evidence / human-only or bounded delegation:
+- Authorized executor / scope, branch, credential, duration and revocation limits:
+- Pre-merge exact SHA matches reviewed SHA / required checks and security evidence / atomic stale-head guard:
+- Merge authorization under project policy / result and final SHA / escalation disposition:
 - Separate release/publication authorization / SHA / surfaces / evidence:
 - Release recovery/rollback notes appropriate to risk:
 - Final commit, merged PR, closure disposition, and follow-up risks:
