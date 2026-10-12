@@ -1,43 +1,73 @@
 # Project Agent Configuration
 
-> **Reusable template — project-specific customization required.** Replace every placeholder, assign accountable roles, define project gates and required checks, and obtain recorded owner approval before adoption. This draft does not authorize implementation or release.
+> **Reusable template — project-specific customization required.** Replace every placeholder, assign accountable roles, define project gates and checks, and obtain recorded owner approval before adoption. This draft grants no implementation, merge, deployment, or release authority.
 
-**Project:** [PROJECT_NAME]  
-**Repository:** [OWNER/REPO]  
-**Governance contract version:** 1.0.0  
-**Configuration owner:** [NAME]  
-**Status:** Draft
+**Project:** [PROJECT_NAME]
+
+**Repository:** [OWNER/REPO]
+
+**Governance contract version:** 1.1.0 candidate
+
+**Upstream tag:** v1.1.0 (not yet published; do not treat as a released pin)
+
+**Upstream exact commit:** [REVIEWED CANDIDATE SHA; REPLACE WITH VERIFIED RELEASE SHA AFTER PUBLICATION]
+
+**Configuration owner:** [NAME]
+
+**Project governance revision:** [VERSION]
+
+**Status:** Draft, adoption inactive
 
 ## Outcomes and boundaries
-- Product objective: [WHAT THE PROJECT DELIVERS]
-- In scope: [FEATURES / COMPONENTS]
-- Out of scope: [EXCLUSIONS]
-- Architecture constraints: [TECH STACK / API / DATA / COMPATIBILITY]
-- Risk class and sensitive assets: [DETAILS]
+- Product objective: [OUTCOME]
+- In/out of scope: [BOUNDARIES]
+- Architecture/compatibility constraints: [CONTRACTS]
+- Risk class and sensitive assets: [DETAILS; CLASSIFY EACH TASK]
 
 ## Assignments
-- Product Owner / CTO: [PERSON]
-- Product Architect / CTO Advisor: [AGENT]
-- Senior Software Engineer / Builder: [AGENT]
-- Principal Engineer / Independent Reviewer: [AGENT]
-- CISO / Security QA: [AGENT OR NONE; INCLUDE TRIGGERS]
+- Owner / CTO, merge and release authority: [HUMAN]
+- Architect / advisor: [AGENT OR AUTHORIZED SUBSTITUTE]
+- Builder: [AGENT]
+- Independent principal reviewer: [AGENT]
+- Independent security reviewer: [DESIGNATED REVIEWER WHEN TRIGGERED]
+- Classification authority: [OWNER OR DELEGATE INDEPENDENT OF BUILDER; EVIDENCE OF DELEGATION]
 
-## Tools and repository policy
-- Issue tracker: [LOCATION]
+## Tools and mandatory gates
+- Issue tracker and approval evidence: [LOCATION; ISSUE REQUIREMENTS STILL APPLY]
+- Spec gate: [WHO RECORDS READY TO IMPLEMENT; BIND APPROVAL TO SPEC REVISION]
 - CI/test matrix: [COMMANDS, ENVIRONMENTS, REQUIRED CHECKS]
-- Branch/PR conventions: [RULES]
-- Merge authority: [PERSON / DELEGATED ROLE]
-- Release authority: [PERSON]
-- Deployment permissions: [LIMITS]
+- Applicable container/package/security checks: [TRIGGERS AND CHECKS]
+- Branch/PR and isolation policy: [RULES]
+- Protected governance paths: [CONTRACT, CONFIGURATION, POLICY, WORKFLOWS, ENFORCEMENT CODE]
+- Credential/deployment permissions: [LIMITS; HUMAN-CONTROLLED]
+- Security review recording: [EXACT-SHA DISPOSITION AND LOCATION]
+- Release/publication authorization and recovery evidence: [WHO, SCOPE, SHA, SURFACES, CHECKS, RECOVERY NOTES]
+- Retained stronger safeguards: [EXISTING CONTRACTS, PRIVACY RULES, REVIEW AND HUMAN GATES]
 
-## Gates and deviations
-- Spec approval: [WHO / HOW RECORDED]
-- Security review triggers beyond master policy: [TRIGGERS]
-- Exceptions to master policy: [NONE OR APPROVED DEVIATIONS]
-- Evidence storage: [PR COMMENTS / ARTIFACTS / RELEASE NOTES]
-- Maximum correction cycles: 2
+## Tier eligibility and overrides
+All tasks start Tier 2. Upstream exclusions and triggers are mandatory; project overrides may only narrow eligibility or add safeguards.
+
+- Tier 0 positive evidence: [NEGLIGIBLE RISK; NONTECHNICAL PROSE/FORMATTING ONLY; NO EXCLUDED CONTENT]
+- Tier 0 independent disposition: [AUTHORIZED HUMAN OR PROJECT-MANDATED REVIEWER; NO SELF-APPROVAL]
+- Tier 1 positive evidence: [LOW-RISK BOUNDED NONSECURITY SCOPE; CLEAR ACCEPTANCE AND FOCUSED TESTS]
+- Tier 1 independent reviewer: [CODEX OR AUTHORIZED SUBSTITUTE; EXACT SHA]
+- Additional Tier 2 triggers: [PROJECT PATHS AND BEHAVIORS]
+- Scope expansion/uncertainty: stop for approval and reclassification; Tier 2 if ambiguous.
+- Severity mapping: [PRESERVE PROJECT RULES; IMPORTANT PREVENTS AUTOMATED APPROVAL]
+- Review freshness: every changed SHA requires fresh independent disposition.
+
+## Deviations and version control
+- Default maximum correction/re-review cycles: 2; initial review is cycle 0.
+- Project maximum: [2 OR EXPLICIT APPROVED DEVIATION]
+- Deviation register: [CONTROL, RATIONALE, APPROVER, APPROVAL EVIDENCE, REVIEW DATE]
+- Precedence: upstream baseline plus approved configuration and retained stricter local controls; contradictions block work until owner resolution.
+- Policy changes: owner approval and recorded project contract revision; never relabel a modified upstream contract as unchanged.
+- Evidence storage: [ISSUE/PR/ARTIFACTS/RELEASE RECORDS]
 
 ## Adoption record
-- Approved by: [NAME]
-- Date: [YYYY-MM-DD]
-- Contract version pinned: 1.0.0
+- Approved by / evidence: [HUMAN AND LINK]
+- Date / next review: [DATES]
+- Contract version pinned: [1.1.0 AFTER SEPARATE PUBLICATION APPROVAL]
+- Verified release commit: [SHA]
+- Existing project baseline reviewed: [SHA]
+- Unresolved decisions: [NONE BEFORE ACTIVATION]
