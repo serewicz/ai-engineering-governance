@@ -1,0 +1,1370 @@
+[
+  {
+    "name": "positive Tier 0 typo",
+    "facts": {
+      "requested_tier": 0,
+      "change_kinds": [
+        "typo"
+      ],
+      "triggers": [],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 0
+  },
+  {
+    "name": "positive Tier 0 punctuation",
+    "facts": {
+      "requested_tier": 0,
+      "change_kinds": [
+        "punctuation"
+      ],
+      "triggers": [],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 0
+  },
+  {
+    "name": "positive Tier 0 prose_whitespace",
+    "facts": {
+      "requested_tier": 0,
+      "change_kinds": [
+        "prose_whitespace"
+      ],
+      "triggers": [],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 0
+  },
+  {
+    "name": "positive Tier 0 prose_formatting",
+    "facts": {
+      "requested_tier": 0,
+      "change_kinds": [
+        "prose_formatting"
+      ],
+      "triggers": [],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 0
+  },
+  {
+    "name": "positive Tier 0 nontechnical_prose",
+    "facts": {
+      "requested_tier": 0,
+      "change_kinds": [
+        "nontechnical_prose"
+      ],
+      "triggers": [],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 0
+  },
+  {
+    "name": "positive Tier 1 nonsecurity_bug",
+    "facts": {
+      "requested_tier": 1,
+      "change_kinds": [
+        "nonsecurity_bug"
+      ],
+      "triggers": [],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 1
+  },
+  {
+    "name": "positive Tier 1 presentation",
+    "facts": {
+      "requested_tier": 1,
+      "change_kinds": [
+        "presentation"
+      ],
+      "triggers": [],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 1
+  },
+  {
+    "name": "positive Tier 1 simple_test",
+    "facts": {
+      "requested_tier": 1,
+      "change_kinds": [
+        "simple_test"
+      ],
+      "triggers": [],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 1
+  },
+  {
+    "name": "positive Tier 1 bounded_docs",
+    "facts": {
+      "requested_tier": 1,
+      "change_kinds": [
+        "bounded_docs"
+      ],
+      "triggers": [],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 1
+  },
+  {
+    "name": "batch eligible prose",
+    "facts": {
+      "requested_tier": 0,
+      "change_kinds": [
+        "typo",
+        "punctuation"
+      ],
+      "triggers": [],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 0
+  },
+  {
+    "name": "Tier 1 technical nonsecurity prose with approved spec",
+    "facts": {
+      "requested_tier": 1,
+      "change_kinds": [
+        "bounded_docs"
+      ],
+      "triggers": [],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 1
+  },
+  {
+    "name": "negative Tier 0 security",
+    "facts": {
+      "requested_tier": 0,
+      "change_kinds": [
+        "typo"
+      ],
+      "triggers": [
+        "security"
+      ],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 2
+  },
+  {
+    "name": "negative Tier 1 security",
+    "facts": {
+      "requested_tier": 1,
+      "change_kinds": [
+        "typo"
+      ],
+      "triggers": [
+        "security"
+      ],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 2
+  },
+  {
+    "name": "negative Tier 0 privacy",
+    "facts": {
+      "requested_tier": 0,
+      "change_kinds": [
+        "typo"
+      ],
+      "triggers": [
+        "privacy"
+      ],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 2
+  },
+  {
+    "name": "negative Tier 1 privacy",
+    "facts": {
+      "requested_tier": 1,
+      "change_kinds": [
+        "typo"
+      ],
+      "triggers": [
+        "privacy"
+      ],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 2
+  },
+  {
+    "name": "negative Tier 0 governance",
+    "facts": {
+      "requested_tier": 0,
+      "change_kinds": [
+        "typo"
+      ],
+      "triggers": [
+        "governance"
+      ],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 2
+  },
+  {
+    "name": "negative Tier 1 governance",
+    "facts": {
+      "requested_tier": 1,
+      "change_kinds": [
+        "typo"
+      ],
+      "triggers": [
+        "governance"
+      ],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 2
+  },
+  {
+    "name": "negative Tier 0 deployment",
+    "facts": {
+      "requested_tier": 0,
+      "change_kinds": [
+        "typo"
+      ],
+      "triggers": [
+        "deployment"
+      ],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 2
+  },
+  {
+    "name": "negative Tier 1 deployment",
+    "facts": {
+      "requested_tier": 1,
+      "change_kinds": [
+        "typo"
+      ],
+      "triggers": [
+        "deployment"
+      ],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 2
+  },
+  {
+    "name": "negative Tier 0 dependency",
+    "facts": {
+      "requested_tier": 0,
+      "change_kinds": [
+        "typo"
+      ],
+      "triggers": [
+        "dependency"
+      ],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 2
+  },
+  {
+    "name": "negative Tier 1 dependency",
+    "facts": {
+      "requested_tier": 1,
+      "change_kinds": [
+        "typo"
+      ],
+      "triggers": [
+        "dependency"
+      ],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 2
+  },
+  {
+    "name": "negative Tier 0 supply_chain",
+    "facts": {
+      "requested_tier": 0,
+      "change_kinds": [
+        "typo"
+      ],
+      "triggers": [
+        "supply_chain"
+      ],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 2
+  },
+  {
+    "name": "negative Tier 1 supply_chain",
+    "facts": {
+      "requested_tier": 1,
+      "change_kinds": [
+        "typo"
+      ],
+      "triggers": [
+        "supply_chain"
+      ],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 2
+  },
+  {
+    "name": "negative Tier 0 ci_permissions",
+    "facts": {
+      "requested_tier": 0,
+      "change_kinds": [
+        "typo"
+      ],
+      "triggers": [
+        "ci_permissions"
+      ],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 2
+  },
+  {
+    "name": "negative Tier 1 ci_permissions",
+    "facts": {
+      "requested_tier": 1,
+      "change_kinds": [
+        "typo"
+      ],
+      "triggers": [
+        "ci_permissions"
+      ],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 2
+  },
+  {
+    "name": "negative Tier 0 publication",
+    "facts": {
+      "requested_tier": 0,
+      "change_kinds": [
+        "typo"
+      ],
+      "triggers": [
+        "publication"
+      ],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 2
+  },
+  {
+    "name": "negative Tier 1 publication",
+    "facts": {
+      "requested_tier": 1,
+      "change_kinds": [
+        "typo"
+      ],
+      "triggers": [
+        "publication"
+      ],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 2
+  },
+  {
+    "name": "negative Tier 0 trust_boundary",
+    "facts": {
+      "requested_tier": 0,
+      "change_kinds": [
+        "typo"
+      ],
+      "triggers": [
+        "trust_boundary"
+      ],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 2
+  },
+  {
+    "name": "negative Tier 1 trust_boundary",
+    "facts": {
+      "requested_tier": 1,
+      "change_kinds": [
+        "typo"
+      ],
+      "triggers": [
+        "trust_boundary"
+      ],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 2
+  },
+  {
+    "name": "negative Tier 0 cryptography",
+    "facts": {
+      "requested_tier": 0,
+      "change_kinds": [
+        "typo"
+      ],
+      "triggers": [
+        "cryptography"
+      ],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 2
+  },
+  {
+    "name": "negative Tier 1 cryptography",
+    "facts": {
+      "requested_tier": 1,
+      "change_kinds": [
+        "typo"
+      ],
+      "triggers": [
+        "cryptography"
+      ],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 2
+  },
+  {
+    "name": "negative Tier 0 authentication",
+    "facts": {
+      "requested_tier": 0,
+      "change_kinds": [
+        "typo"
+      ],
+      "triggers": [
+        "authentication"
+      ],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 2
+  },
+  {
+    "name": "negative Tier 1 authentication",
+    "facts": {
+      "requested_tier": 1,
+      "change_kinds": [
+        "typo"
+      ],
+      "triggers": [
+        "authentication"
+      ],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 2
+  },
+  {
+    "name": "negative Tier 0 secrets",
+    "facts": {
+      "requested_tier": 0,
+      "change_kinds": [
+        "typo"
+      ],
+      "triggers": [
+        "secrets"
+      ],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 2
+  },
+  {
+    "name": "negative Tier 1 secrets",
+    "facts": {
+      "requested_tier": 1,
+      "change_kinds": [
+        "typo"
+      ],
+      "triggers": [
+        "secrets"
+      ],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 2
+  },
+  {
+    "name": "negative Tier 0 network_exposure",
+    "facts": {
+      "requested_tier": 0,
+      "change_kinds": [
+        "typo"
+      ],
+      "triggers": [
+        "network_exposure"
+      ],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 2
+  },
+  {
+    "name": "negative Tier 1 network_exposure",
+    "facts": {
+      "requested_tier": 1,
+      "change_kinds": [
+        "typo"
+      ],
+      "triggers": [
+        "network_exposure"
+      ],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 2
+  },
+  {
+    "name": "negative Tier 0 sensitive_data",
+    "facts": {
+      "requested_tier": 0,
+      "change_kinds": [
+        "typo"
+      ],
+      "triggers": [
+        "sensitive_data"
+      ],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 2
+  },
+  {
+    "name": "negative Tier 1 sensitive_data",
+    "facts": {
+      "requested_tier": 1,
+      "change_kinds": [
+        "typo"
+      ],
+      "triggers": [
+        "sensitive_data"
+      ],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 2
+  },
+  {
+    "name": "negative Tier 0 security_documentation",
+    "facts": {
+      "requested_tier": 0,
+      "change_kinds": [
+        "typo"
+      ],
+      "triggers": [
+        "security_documentation"
+      ],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 2
+  },
+  {
+    "name": "negative Tier 1 security_documentation",
+    "facts": {
+      "requested_tier": 1,
+      "change_kinds": [
+        "typo"
+      ],
+      "triggers": [
+        "security_documentation"
+      ],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 2
+  },
+  {
+    "name": "negative Tier 0 project_mandatory_trigger",
+    "facts": {
+      "requested_tier": 0,
+      "change_kinds": [
+        "typo"
+      ],
+      "triggers": [
+        "project_mandatory_trigger"
+      ],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 2
+  },
+  {
+    "name": "negative Tier 1 project_mandatory_trigger",
+    "facts": {
+      "requested_tier": 1,
+      "change_kinds": [
+        "typo"
+      ],
+      "triggers": [
+        "project_mandatory_trigger"
+      ],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 2
+  },
+  {
+    "name": "negative Tier 0 unknown_trigger",
+    "facts": {
+      "requested_tier": 0,
+      "change_kinds": [
+        "typo"
+      ],
+      "triggers": [
+        "unknown_trigger"
+      ],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 2
+  },
+  {
+    "name": "negative Tier 1 unknown_trigger",
+    "facts": {
+      "requested_tier": 1,
+      "change_kinds": [
+        "typo"
+      ],
+      "triggers": [
+        "unknown_trigger"
+      ],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 2
+  },
+  {
+    "name": "excluded Tier 0 executable_whitespace",
+    "facts": {
+      "requested_tier": 0,
+      "change_kinds": [
+        "executable_whitespace"
+      ],
+      "triggers": [],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 2
+  },
+  {
+    "name": "excluded Tier 0 executable_content",
+    "facts": {
+      "requested_tier": 0,
+      "change_kinds": [
+        "executable_content"
+      ],
+      "triggers": [],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 2
+  },
+  {
+    "name": "excluded Tier 0 configuration",
+    "facts": {
+      "requested_tier": 0,
+      "change_kinds": [
+        "configuration"
+      ],
+      "triggers": [],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 2
+  },
+  {
+    "name": "excluded Tier 0 dependencies",
+    "facts": {
+      "requested_tier": 0,
+      "change_kinds": [
+        "dependencies"
+      ],
+      "triggers": [],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 2
+  },
+  {
+    "name": "excluded Tier 0 technical_claim",
+    "facts": {
+      "requested_tier": 0,
+      "change_kinds": [
+        "technical_claim"
+      ],
+      "triggers": [],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 2
+  },
+  {
+    "name": "excluded Tier 0 governance_file",
+    "facts": {
+      "requested_tier": 0,
+      "change_kinds": [
+        "governance_file"
+      ],
+      "triggers": [],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 2
+  },
+  {
+    "name": "excluded Tier 0 security_documentation",
+    "facts": {
+      "requested_tier": 0,
+      "change_kinds": [
+        "security_documentation"
+      ],
+      "triggers": [],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 2
+  },
+  {
+    "name": "excluded Tier 0 unknown_kind",
+    "facts": {
+      "requested_tier": 0,
+      "change_kinds": [
+        "unknown_kind"
+      ],
+      "triggers": [],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 2
+  },
+  {
+    "name": "code bug not trivial",
+    "facts": {
+      "requested_tier": 0,
+      "change_kinds": [
+        "nonsecurity_bug"
+      ],
+      "triggers": [],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 2
+  },
+  {
+    "name": "mixed trivial and configuration",
+    "facts": {
+      "requested_tier": 0,
+      "change_kinds": [
+        "typo",
+        "configuration"
+      ],
+      "triggers": [],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 2
+  },
+  {
+    "name": "security test despite simple_test name",
+    "facts": {
+      "requested_tier": 1,
+      "change_kinds": [
+        "simple_test"
+      ],
+      "triggers": [
+        "security"
+      ],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 2
+  },
+  {
+    "name": "self downgrade",
+    "facts": {
+      "requested_tier": 0,
+      "change_kinds": [
+        "typo"
+      ],
+      "triggers": [],
+      "positive_evidence": true,
+      "independent_authorized_classifier": false,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 2
+  },
+  {
+    "name": "missing eligibility positive_evidence",
+    "facts": {
+      "requested_tier": 0,
+      "change_kinds": [
+        "typo"
+      ],
+      "triggers": [],
+      "positive_evidence": false,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 2
+  },
+  {
+    "name": "missing eligibility scope_clear",
+    "facts": {
+      "requested_tier": 0,
+      "change_kinds": [
+        "typo"
+      ],
+      "triggers": [],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": false,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 2
+  },
+  {
+    "name": "missing eligibility mandatory_controls_preserved",
+    "facts": {
+      "requested_tier": 0,
+      "change_kinds": [
+        "typo"
+      ],
+      "triggers": [],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": false,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 2
+  },
+  {
+    "name": "missing eligibility approved_spec",
+    "facts": {
+      "requested_tier": 0,
+      "change_kinds": [
+        "typo"
+      ],
+      "triggers": [],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": false,
+      "scope_expanded": false
+    },
+    "expected_tier": 2
+  },
+  {
+    "name": "unapproved scope expansion",
+    "facts": {
+      "requested_tier": 0,
+      "change_kinds": [
+        "typo"
+      ],
+      "triggers": [],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": true
+    },
+    "expected_tier": 2
+  },
+  {
+    "name": "default Tier 2",
+    "facts": {
+      "requested_tier": 2,
+      "change_kinds": [
+        "typo"
+      ],
+      "triggers": [],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 2
+  },
+  {
+    "name": "unknown tier",
+    "facts": {
+      "requested_tier": 7,
+      "change_kinds": [
+        "typo"
+      ],
+      "triggers": [],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 2
+  },
+  {
+    "name": "string boolean evidence",
+    "facts": {
+      "requested_tier": 0,
+      "change_kinds": [
+        "typo"
+      ],
+      "triggers": [],
+      "positive_evidence": "true",
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 2
+  },
+  {
+    "name": "no change kinds",
+    "facts": {
+      "requested_tier": 0,
+      "change_kinds": [],
+      "triggers": [],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 2
+  },
+  {
+    "name": "invalid trigger representation",
+    "facts": {
+      "requested_tier": 0,
+      "change_kinds": [
+        "typo"
+      ],
+      "triggers": "none",
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 2
+  },
+  {
+    "name": "invalid kind type",
+    "facts": {
+      "requested_tier": 0,
+      "change_kinds": [
+        null
+      ],
+      "triggers": [],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 2
+  },
+  {
+    "name": "omitted required fact requested_tier",
+    "facts": {
+      "change_kinds": [
+        "typo"
+      ],
+      "triggers": [],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 2
+  },
+  {
+    "name": "omitted required fact change_kinds",
+    "facts": {
+      "requested_tier": 0,
+      "triggers": [],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 2
+  },
+  {
+    "name": "omitted required fact triggers",
+    "facts": {
+      "requested_tier": 0,
+      "change_kinds": [
+        "typo"
+      ],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 2
+  },
+  {
+    "name": "omitted required fact positive_evidence",
+    "facts": {
+      "requested_tier": 0,
+      "change_kinds": [
+        "typo"
+      ],
+      "triggers": [],
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 2
+  },
+  {
+    "name": "omitted required fact independent_authorized_classifier",
+    "facts": {
+      "requested_tier": 0,
+      "change_kinds": [
+        "typo"
+      ],
+      "triggers": [],
+      "positive_evidence": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 2
+  },
+  {
+    "name": "omitted required fact scope_clear",
+    "facts": {
+      "requested_tier": 0,
+      "change_kinds": [
+        "typo"
+      ],
+      "triggers": [],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 2
+  },
+  {
+    "name": "omitted required fact mandatory_controls_preserved",
+    "facts": {
+      "requested_tier": 0,
+      "change_kinds": [
+        "typo"
+      ],
+      "triggers": [],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "approved_spec": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 2
+  },
+  {
+    "name": "omitted required fact approved_spec",
+    "facts": {
+      "requested_tier": 0,
+      "change_kinds": [
+        "typo"
+      ],
+      "triggers": [],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "scope_expanded": false
+    },
+    "expected_tier": 2
+  },
+  {
+    "name": "omitted required fact scope_expanded",
+    "facts": {
+      "requested_tier": 0,
+      "change_kinds": [
+        "typo"
+      ],
+      "triggers": [],
+      "positive_evidence": true,
+      "independent_authorized_classifier": true,
+      "scope_clear": true,
+      "mandatory_controls_preserved": true,
+      "approved_spec": true
+    },
+    "expected_tier": 2
+  }
+]
