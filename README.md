@@ -8,6 +8,7 @@ Reusable governance for AI-assisted software engineering: human accountability, 
 - [Agent workflow](AGENT_WORKFLOW.md): routing, checks, review, correction, and human authorization.
 - [Handoff template](AGENT_HANDOFF_TEMPLATE.md): classification, exact SHA, evidence, review, and closure.
 - [Tier routing matrix](TIER_ROUTING.md): eligibility, positive/negative cases, and estimated model executions.
+- [Independent review evidence](reviews/INDEPENDENT_REVIEW.md): initial exact-SHA findings, security evaluation and outstanding version decision; final-head evidence is in the PR.
 - [HarvestGuard adoption proposal](proposals/HARVESTGUARD_ADOPTION_V1.1.0.md): inactive proposal preserving stronger controls and tracking enforcement gaps.
 
 ## Roles and execution
@@ -22,7 +23,7 @@ The published baseline remains [v1.0.0](https://github.com/serewicz/ai-engineeri
 4. Obtain recorded owner approval, pin version and release SHA, complete the adoption record, and activate only then. Publication alone grants no project authority.
 5. Link project contributor/agent instructions to the adopted controls. Use exact-SHA review, valid evidence, human gates and bounded correction loops.
 
-MAJOR versions change decision rights or mandatory gates; MINOR adds compatible procedures; PATCH clarifies existing obligations. The proposed 1.1.0 changes execution depth, preserves mandatory gates and requires stricter project rules to remain in force. Governance changes require owner approval and a recorded revision.
+MAJOR versions change decision rights or mandatory gates; MINOR adds compatible procedures; PATCH clarifies existing obligations. The requested 1.1.0 label is provisional: independent review identified that universal human-only merge strengthens the baseline gate, which may require a MAJOR version under this rule. Tim must resolve the version decision before merge/publication; human authority must not be weakened to avoid the discrepancy. Stricter project rules remain in force. Governance changes require owner approval and a recorded revision.
 
 ## Validation
 Use Python 3.10+ with its standard library; no package installation is required:

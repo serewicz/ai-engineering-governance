@@ -49,7 +49,7 @@ def validate():
                 failures.append(f"Sensitive token or local path pattern: {path.relative_to(ROOT)}")
     # These are limited structural assertions, not proof of semantic equivalence.
     expected = {
-        "AI_ENGINEERING_GOVERNANCE.md": ("**Version:** 1.1.0", "## Non-negotiable controls", "### Tier 0", "### Tier 1", "### Tier 2", "Every task starts at **Tier 2**", "human-only", "`IMPORTANT`", "## Release gate", "MINOR adds compatible procedures"),
+        "AI_ENGINEERING_GOVERNANCE.md": ("**Version:** 1.1.0", "## Non-negotiable controls", "### Tier 0", "### Tier 1", "### Tier 2", "Every task starts at **Tier 2**", "human-only", "`IMPORTANT`", "## Release gate", "MINOR adds compatible procedures", "Unresolved version decision"),
         "AGENT_WORKFLOW.md": ("1.1.0 candidate", "start at Tier 2", "cycle 0", "two corrections", "three corrections", "human-only", "justified `NOT REQUIRED`"),
         "PROJECT_AGENT_CONFIG.md": ("Reusable template", "1.1.0 candidate", "adoption inactive", "exact commit", "independent of builder", "Deviation register", "initial review is cycle 0"),
         "AGENT_HANDOFF_TEMPLATE.md": ("1.1.0 candidate", "Positive eligibility evidence", "Reviewed exact SHA", "Security disposition", "IMPORTANT", "Separate release/publication authorization"),

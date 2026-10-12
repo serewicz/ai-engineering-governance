@@ -64,6 +64,7 @@ Main currently requires strict Python 3.10/3.11/3.12 checks, resolved conversati
 6. Tim approves activation after required changes pass or explicitly records permitted temporary exceptions with owner, rationale, expiry/review date, and manual mitigation. Mandatory upstream controls cannot simply be waived by a tier. Record adoption date and final project revision.
 
 ## Unresolved risks and approval actions
+- Resolve the upstream semantic-version conflict: universal human-only merge strengthens a gate that v1.0.0 left to project policy. The 1.1.0 label is provisional; confirm the baseline interpretation or select a MAJOR version before merge/publication. Update this proposal and its pin to the separately approved release identity.
 - Approve or reject retaining 3 correction cycles; prior project code records authorization but the new adoption deviation still needs an adoption record.
 - Confirm role assignments and any classifier delegation; do not infer new permissions from role names.
 - Decide enforceable principal/security readiness and spec authorization mechanism.
