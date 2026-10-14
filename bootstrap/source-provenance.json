@@ -1,0 +1,73 @@
+{
+  "sources": {
+    "runtime/control.py": {
+      "repository": "serewicz/sar-tracker",
+      "commit": "514962daccfd27b268579d149028eb1de228b1d7",
+      "path": "scripts/orchestration/control.py",
+      "sha256": "4dfea355e92983d3381b46489d8c94e8dee69c15ab6e1415e44e150db9be49fd"
+    },
+    "runtime/checkpoint.py": {
+      "repository": "serewicz/sar-tracker",
+      "commit": "514962daccfd27b268579d149028eb1de228b1d7",
+      "path": "scripts/orchestration/checkpoint.py",
+      "sha256": "fba6d18d04b7716a483764e3620f2142bd3377d0cbb72362a7b44fbc3a4f8081"
+    },
+    "runtime/segments.py": {
+      "repository": "serewicz/sar-tracker",
+      "commit": "514962daccfd27b268579d149028eb1de228b1d7",
+      "path": "scripts/orchestration/segments.py",
+      "sha256": "59a390c0fcfd4463a53770cf8057ee2458c5268c1dce18f3adb088704e47c982"
+    },
+    "runtime/budget.py": {
+      "repository": "serewicz/sar-tracker",
+      "commit": "514962daccfd27b268579d149028eb1de228b1d7",
+      "path": "scripts/orchestration/budget.py",
+      "sha256": "d14e5d3c9f51f7f57d7995ea43b716dde1dab9a135b76487cdc5400e5bcb6bae"
+    },
+    "runtime/review-schema.json": {
+      "repository": "serewicz/sar-tracker",
+      "commit": "514962daccfd27b268579d149028eb1de228b1d7",
+      "path": "scripts/orchestration/review-schema.json",
+      "sha256": "a5eaf53aff3ba82d1c2b249e1e0763b4a2a07218ff9c92f6d6e3ebf56da4eb0b"
+    },
+    "runtime/wif_auth_test.py": {
+      "repository": "serewicz/sar-tracker",
+      "commit": "536533906c31f30336571c47eca802757f1b1142",
+      "path": "scripts/orchestration/wif_auth_test.py",
+      "status": "new-reviewed-candidate-live-test-not-run"
+    },
+    "templates/workflows/agent-orchestrator.yml": {
+      "repository": "serewicz/sar-tracker",
+      "commit": "514962daccfd27b268579d149028eb1de228b1d7",
+      "path": ".github/workflows/agent-orchestrator.yml",
+      "sha256": "85c0f8791b9d7e04c78ecaba815ba44c96fa5ff08b27b9234e5d9a06eb834ac6"
+    },
+    "templates/workflows/agent-build.yml": {
+      "repository": "serewicz/sar-tracker",
+      "commit": "514962daccfd27b268579d149028eb1de228b1d7",
+      "path": ".github/workflows/agent-build.yml",
+      "sha256": "5b50d8290024165bce5a53e9bbaddbdc53740638bb8c1d6759f51e02c19ef8c4"
+    },
+    "templates/workflows/agent-publish.yml": {
+      "repository": "serewicz/sar-tracker",
+      "commit": "514962daccfd27b268579d149028eb1de228b1d7",
+      "path": ".github/workflows/agent-publish.yml",
+      "sha256": "524dc054ddfc38fb6a90d49c530519f1395b671ec5c9ce6e4df9ecedeb9f55dd"
+    },
+    "templates/workflows/agent-review.yml": {
+      "repository": "serewicz/sar-tracker",
+      "commit": "514962daccfd27b268579d149028eb1de228b1d7",
+      "path": ".github/workflows/agent-review.yml",
+      "sha256": "64ca06c1660d48771e97d823a3829ca2f5b0ea2ee61d521526a7ec34dc4b36f8"
+    },
+    "templates/workflows/ci.yml": {
+      "repository": "serewicz/sar-tracker",
+      "commit": "514962daccfd27b268579d149028eb1de228b1d7",
+      "path": ".github/workflows/ci.yml",
+      "sha256": "6e2db680fc44a8b1cf27670de5d5b090774a4d196e75cd0e902aaf2ac02687af"
+    }
+  },
+  "reference_harvestguard": "77b52ac56833d9821008d1466683bb9969ed7641",
+  "governance_pin": "8c9c954f57ac119877396bba1f973a7dc2700a10",
+  "source_integration_not_claimed": true
+}

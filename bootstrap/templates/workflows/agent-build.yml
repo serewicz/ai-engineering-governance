@@ -1,0 +1,320 @@
+{
+  "name": "Bounded Claude builder",
+  "on": {
+    "workflow_call": {
+      "inputs": {
+        "control_sha": {
+          "type": "string",
+          "required": true
+        },
+        "base_sha": {
+          "type": "string",
+          "required": true
+        },
+        "branch": {
+          "type": "string",
+          "required": true
+        },
+        "pr_number": {
+          "type": "string",
+          "required": true
+        },
+        "cycle": {
+          "type": "number",
+          "required": true
+        },
+        "prior_cycle": {
+          "type": "number",
+          "required": true
+        }
+      }
+    }
+  },
+  "permissions": {
+    "contents": "read",
+    "issues": "read",
+    "pull-requests": "read",
+    "id-token": "write"
+  },
+  "jobs": {
+    "build": {
+      "runs-on": "macos-15",
+      "timeout-minutes": 45,
+      "permissions": {
+        "contents": "read",
+        "issues": "read",
+        "pull-requests": "read",
+        "id-token": "write"
+      },
+      "env": {
+        "GH_TOKEN": "${{ github.token }}",
+        "ISSUE_NUMBER": "7",
+        "CONTROL_SHA": "${{ inputs.control_sha }}",
+        "BASE_SHA": "${{ inputs.base_sha }}",
+        "CYCLE": "${{ inputs.cycle }}",
+        "BRANCH": "${{ inputs.branch }}",
+        "PR_NUMBER": "${{ inputs.pr_number }}",
+        "CANDIDATE": "${{ github.workspace }}",
+        "ENABLED": "${{ vars.SAR_ORCHESTRATION_ENABLED }}",
+        "AUTHORIZATION_ID": "${{ vars.SAR_AUTHORIZATION_COMMENT_ID }}"
+      },
+      "steps": [
+        {
+          "name": "Initialize isolated run paths",
+          "run": "echo \"RUN_DATA=$RUNNER_TEMP/run-data\" >> \"$GITHUB_ENV\"\necho \"ARTIFACT=$RUNNER_TEMP/patch-artifact\" >> \"$GITHUB_ENV\""
+        },
+        {
+          "name": "Checkout immutable source",
+          "uses": "actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "with": {
+            "ref": "${{ inputs.control_sha }}",
+            "persist-credentials": false,
+            "fetch-depth": 0,
+            "path": ".control"
+          }
+        },
+        {
+          "name": "Move trusted control outside candidate tree",
+          "run": "mv \"$GITHUB_WORKSPACE/.control\" \"$RUNNER_TEMP/control\""
+        },
+        {
+          "name": "CPython 3.14",
+          "uses": "actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065",
+          "with": {
+            "python-version": "3.14"
+          }
+        },
+        {
+          "name": "Fail-closed task budget admission",
+          "run": "python ${{ runner.temp }}/control/scripts/orchestration/budget.py gate",
+          "env": {
+            "BUDGET_ROLE": "claude"
+          }
+        },
+        {
+          "name": "Revalidate current issue authorization and main control SHA",
+          "run": "python ${{ runner.temp }}/control/scripts/orchestration/control.py gate"
+        },
+        {
+          "name": "Checkout immutable source",
+          "uses": "actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "with": {
+            "ref": "${{ inputs.base_sha }}",
+            "persist-credentials": false,
+            "fetch-depth": 0
+          }
+        },
+        {
+          "name": "Validate SAR-only WIF configuration",
+          "run": "python - <<'PY'\nimport os\nfrom pathlib import Path\nassert all(os.environ.get(n) for n in ('WIF_RULE','WIF_ORG','WIF_ACCOUNT','WIF_WORKSPACE'))\nassert os.environ['WIF_REPOSITORY'] == 'serewicz/sar-tracker', 'SAR-only trust attestation required'\nPY",
+          "env": {
+            "WIF_REPOSITORY": "${{ vars.SAR_WIF_REPOSITORY }}",
+            "WIF_RULE": "${{ vars.SAR_ANTHROPIC_FEDERATION_RULE_ID }}",
+            "WIF_ORG": "${{ vars.SAR_ANTHROPIC_ORGANIZATION_ID }}",
+            "WIF_ACCOUNT": "${{ vars.SAR_ANTHROPIC_SERVICE_ACCOUNT_ID }}",
+            "WIF_WORKSPACE": "${{ vars.SAR_ANTHROPIC_WORKSPACE_ID }}"
+          }
+        },
+        {
+          "name": "Download preceding exact-SHA review",
+          "uses": "actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093",
+          "with": {
+            "name": "principal-review-${{ inputs.prior_cycle }}",
+            "path": "${{ runner.temp }}/prior-review"
+          },
+          "if": "inputs.cycle > 0"
+        },
+        {
+          "name": "Validate prior review before correction",
+          "run": "python ${{ runner.temp }}/control/scripts/orchestration/control.py head\npython - <<'PY'\nimport os,sys\nsys.path.insert(0,os.environ['CONTROL_DIR']+'/scripts/orchestration')\nfrom control import load,review_ok\nassert review_ok(load(os.environ['PRIOR_REVIEW']), os.environ['BASE_SHA']) == 'BLOCKERS'\nPY",
+          "if": "inputs.cycle > 0",
+          "env": {
+            "CONTROL_DIR": "${{ runner.temp }}/control",
+            "PRIOR_REVIEW": "${{ runner.temp }}/prior-review/review.json"
+          }
+        },
+        {
+          "name": "Claude initial segment 1 or bounded correction",
+          "uses": "anthropics/claude-code-action@3526ba0182e074276813d3014cc27ac6720b8648",
+          "with": {
+            "github_token": "${{ github.token }}",
+            "anthropic_federation_rule_id": "${{ vars.SAR_ANTHROPIC_FEDERATION_RULE_ID }}",
+            "anthropic_organization_id": "${{ vars.SAR_ANTHROPIC_ORGANIZATION_ID }}",
+            "anthropic_service_account_id": "${{ vars.SAR_ANTHROPIC_SERVICE_ACCOUNT_ID }}",
+            "anthropic_workspace_id": "${{ vars.SAR_ANTHROPIC_WORKSPACE_ID }}",
+            "prompt": "Read the trusted builder instructions at ${{ runner.temp }}/control/scripts/orchestration/builder-prompt.txt. Context and result are at RUN_DATA from the environment; prior review if correcting is ${{ runner.temp }}/prior-review/review.json. Never change control code.",
+            "claude_args": "--max-turns ${{ inputs.cycle == 0 && 40 || 80 }}",
+            "settings": "{\"permissions\": {\"allow\": [\"Read\", \"Glob\", \"Grep\", \"Edit(sar_tracker/**)\", \"Write(sar_tracker/**)\", \"Edit(tests/a1/**)\", \"Write(tests/a1/**)\", \"Edit(docs/a1/**)\", \"Write(docs/a1/**)\", \"Write(${{ runner.temp }}/run-data/result.json)\", \"Bash(python -m unittest*)\", \"Bash(git diff*)\", \"Bash(git status*)\"], \"deny\": [\"Edit(.git/**)\", \"Write(.git/**)\", \"Edit(.github/**)\", \"Write(.github/**)\", \"Edit(${{ runner.temp }}/control/**)\", \"Write(${{ runner.temp }}/control/**)\", \"Bash(gh*)\", \"Bash(git push*)\", \"Bash(git commit*)\", \"Bash(curl*)\", \"Bash(wget*)\", \"Bash(ssh*)\"]}}",
+            "show_full_output": "false",
+            "display_report": "false"
+          },
+          "id": "claude_1",
+          "continue-on-error": true
+        },
+        {
+          "name": "Collect and verify segment-1 checkpoint",
+          "id": "checkpoint_1",
+          "if": "always() && steps.claude_1.outcome != 'skipped'",
+          "run": "python ${{ runner.temp }}/control/scripts/orchestration/checkpoint.py collect",
+          "env": {
+            "CHECKPOINT": "${{ runner.temp }}/checkpoint-segment-1",
+            "CHECKPOINT_LABEL": "segment-1"
+          }
+        },
+        {
+          "name": "Upload verified segment-1 checkpoint",
+          "if": "always() && steps.claude_1.outcome != 'skipped' && steps.checkpoint_1.outcome == 'success'",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "name": "recovery-${{ inputs.cycle }}-segment-1",
+            "path": "${{ runner.temp }}/checkpoint-segment-1/recovery.zip\n${{ runner.temp }}/checkpoint-segment-1/manifest.json\n${{ runner.temp }}/checkpoint-segment-1/RECOVERY.md",
+            "retention-days": 14,
+            "if-no-files-found": "error"
+          }
+        },
+        {
+          "name": "Classify segment and validate session fallback",
+          "id": "segment",
+          "if": "always() && inputs.cycle == 0 && steps.checkpoint_1.outcome == 'success' && steps.claude_1.outcome != 'skipped'",
+          "run": "python ${{ runner.temp }}/control/scripts/orchestration/segments.py",
+          "env": {
+            "SESSION_ID": "${{ steps.claude_1.outputs.session_id }}",
+            "EXECUTION_FILE": "${{ steps.claude_1.outputs.execution_file }}",
+            "SEGMENT_OUTCOME": "${{ steps.claude_1.outcome }}"
+          }
+        },
+        {
+          "name": "Recheck shared task budget before initial segment 2",
+          "if": "success() && inputs.cycle == 0 && steps.segment.outputs.continue == 'true'",
+          "run": "python ${{ runner.temp }}/control/scripts/orchestration/budget.py gate",
+          "env": {
+            "BUDGET_ROLE": "claude",
+            "BUDGET_SEGMENT": "2"
+          }
+        },
+        {
+          "name": "Claude initial segment 2 resume",
+          "uses": "anthropics/claude-code-action@3526ba0182e074276813d3014cc27ac6720b8648",
+          "with": {
+            "github_token": "${{ github.token }}",
+            "anthropic_federation_rule_id": "${{ vars.SAR_ANTHROPIC_FEDERATION_RULE_ID }}",
+            "anthropic_organization_id": "${{ vars.SAR_ANTHROPIC_ORGANIZATION_ID }}",
+            "anthropic_service_account_id": "${{ vars.SAR_ANTHROPIC_SERVICE_ACCOUNT_ID }}",
+            "anthropic_workspace_id": "${{ vars.SAR_ANTHROPIC_WORKSPACE_ID }}",
+            "prompt": "Read the trusted builder instructions at ${{ runner.temp }}/control/scripts/orchestration/builder-prompt.txt. Context and result are at RUN_DATA from the environment; prior review if correcting is ${{ runner.temp }}/prior-review/review.json. Never change control code.",
+            "claude_args": "--max-turns 40 --resume ${{ steps.segment.outputs.session_id }}",
+            "settings": "{\"permissions\": {\"allow\": [\"Read\", \"Glob\", \"Grep\", \"Edit(sar_tracker/**)\", \"Write(sar_tracker/**)\", \"Edit(tests/a1/**)\", \"Write(tests/a1/**)\", \"Edit(docs/a1/**)\", \"Write(docs/a1/**)\", \"Write(${{ runner.temp }}/run-data/result.json)\", \"Bash(python -m unittest*)\", \"Bash(git diff*)\", \"Bash(git status*)\"], \"deny\": [\"Edit(.git/**)\", \"Write(.git/**)\", \"Edit(.github/**)\", \"Write(.github/**)\", \"Edit(${{ runner.temp }}/control/**)\", \"Write(${{ runner.temp }}/control/**)\", \"Bash(gh*)\", \"Bash(git push*)\", \"Bash(git commit*)\", \"Bash(curl*)\", \"Bash(wget*)\", \"Bash(ssh*)\"]}}",
+            "show_full_output": "false",
+            "display_report": "false"
+          },
+          "id": "claude_2",
+          "continue-on-error": true,
+          "if": "success() && inputs.cycle == 0 && steps.segment.outputs.continue == 'true'"
+        },
+        {
+          "name": "Collect and verify segment-2 checkpoint",
+          "id": "checkpoint_2",
+          "if": "always() && steps.claude_2.outcome != 'skipped'",
+          "run": "python ${{ runner.temp }}/control/scripts/orchestration/checkpoint.py collect",
+          "env": {
+            "CHECKPOINT": "${{ runner.temp }}/checkpoint-segment-2",
+            "CHECKPOINT_LABEL": "segment-2"
+          }
+        },
+        {
+          "name": "Upload verified segment-2 checkpoint",
+          "if": "always() && steps.claude_2.outcome != 'skipped' && steps.checkpoint_2.outcome == 'success'",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "name": "recovery-${{ inputs.cycle }}-segment-2",
+            "path": "${{ runner.temp }}/checkpoint-segment-2/recovery.zip\n${{ runner.temp }}/checkpoint-segment-2/manifest.json\n${{ runner.temp }}/checkpoint-segment-2/RECOVERY.md",
+            "retention-days": 14,
+            "if-no-files-found": "error"
+          }
+        },
+        {
+          "name": "Reject terminal failure or incomplete segment chain",
+          "if": "always()",
+          "run": "python - <<'PY'\nimport os\nfrom pathlib import Path\nc=int(os.environ['CYCLE'])\ns1=os.environ['OUTCOME1'];s2=os.environ['OUTCOME2']\nassert os.environ['CP1']=='success'\nif c==0:\n    assert os.environ['CLASSIFY']=='success'\n    if os.environ['CONTINUE']=='true':\n        assert s2=='success' and os.environ['CP2']=='success'\n    else:\n        assert s1=='success' and s2=='skipped'\nelse:\n    assert s1=='success' and s2=='skipped'\nPY",
+          "env": {
+            "OUTCOME1": "${{ steps.claude_1.outcome }}",
+            "OUTCOME2": "${{ steps.claude_2.outcome }}",
+            "CP1": "${{ steps.checkpoint_1.outcome }}",
+            "CP2": "${{ steps.checkpoint_2.outcome }}",
+            "CLASSIFY": "${{ steps.segment.outcome }}",
+            "CONTINUE": "${{ steps.segment.outputs.continue }}"
+          }
+        },
+        {
+          "name": "Independent full unittest pass with A1 discovery enforcement",
+          "run": "python ${{ runner.temp }}/control/scripts/orchestration/control.py validate-tests"
+        },
+        {
+          "name": "Package bounded patch and structured result",
+          "run": "python ${{ runner.temp }}/control/scripts/orchestration/control.py pack"
+        },
+        {
+          "name": "Upload bounded patch",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "name": "claude-patch-${{ inputs.cycle }}",
+            "path": "${{ runner.temp }}/patch-artifact/implementation.patch\n${{ runner.temp }}/patch-artifact/metadata.json\n${{ runner.temp }}/patch-artifact/result.json",
+            "retention-days": 14,
+            "if-no-files-found": "error"
+          }
+        },
+        {
+          "name": "Preserve safe diagnostics",
+          "run": "python ${{ runner.temp }}/control/scripts/orchestration/control.py diagnostics",
+          "if": "always()",
+          "env": {
+            "JOB_STATUS": "${{ job.status }}"
+          }
+        },
+        {
+          "name": "Upload safe diagnostics",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "name": "builder-diagnostics-${{ inputs.cycle }}",
+            "path": "${{ runner.temp }}/run-data/diagnostics.json",
+            "retention-days": 14,
+            "if-no-files-found": "warn"
+          },
+          "if": "always()"
+        },
+        {
+          "name": "Safe budget status evidence",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "if": "always()",
+          "with": {
+            "name": "budget-claude-${{ inputs.cycle }}",
+            "path": "${{ runner.temp }}/run-data/budget-report.json",
+            "retention-days": 14,
+            "if-no-files-found": "warn"
+          }
+        },
+        {
+          "name": "Collect and verify failure checkpoint",
+          "id": "checkpoint_3",
+          "if": "failure() && steps.claude_1.outcome != 'skipped'",
+          "run": "python ${{ runner.temp }}/control/scripts/orchestration/checkpoint.py collect",
+          "env": {
+            "CHECKPOINT": "${{ runner.temp }}/checkpoint-failure",
+            "CHECKPOINT_LABEL": "failure"
+          }
+        },
+        {
+          "name": "Upload verified failure checkpoint",
+          "if": "failure() && steps.claude_1.outcome != 'skipped' && steps.checkpoint_3.outcome == 'success'",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "name": "recovery-${{ inputs.cycle }}-failure",
+            "path": "${{ runner.temp }}/checkpoint-failure/recovery.zip\n${{ runner.temp }}/checkpoint-failure/manifest.json\n${{ runner.temp }}/checkpoint-failure/RECOVERY.md",
+            "retention-days": 14,
+            "if-no-files-found": "error"
+          }
+        }
+      ]
+    }
+  }
+}
