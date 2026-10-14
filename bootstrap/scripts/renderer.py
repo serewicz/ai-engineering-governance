@@ -71,8 +71,18 @@ def render_project(m):
     (destination/'context.json').write_text(json.dumps({'issue':issue,'authorization':record,'control_sha':control_sha,'spec_sha256':DIGEST,'governance_pin':PIN,'approved_spec_authorization':approvals[0]['body']}))
     output(control_sha=control_sha)
 ''')
-    s=replace_function(s,'test_suite','''def test_suite(candidate):
-    test_root=Path(candidate)/'tests';require(test_root.is_dir(),'missing tests')
+    contract_packages=m['ci']['contract_packages']
+    s=replace_function(s,'test_suite',f'''def test_suite(candidate):
+    candidate=Path(candidate);test_root=candidate/'tests';require(test_root.is_dir(),'missing tests')
+    packages={contract_packages!r}
+    for task in TASKS.values():
+        required=any((candidate/root).exists() for root in task['allowed_roots'])
+        if required:
+            for package in packages[task['scope']]:
+                folder=candidate/package
+                require(folder.is_dir() and not folder.is_symlink() and (folder/'__init__.py').is_file(),'contract package missing')
+                focused=unittest.TestLoader().discover(str(folder),pattern='test*.py',top_level_dir=str(test_root))
+                require(focused.countTestCases()>0,'zero contract tests discovered')
     suite=unittest.TestLoader().discover(str(test_root),pattern='test*.py')
     require(suite.countTestCases()>0,'zero discovered tests')
     return suite
@@ -109,6 +119,10 @@ def render_project(m):
             if p.name=='agent-review.yml': job['timeout-minutes']=m['execution']['review_timeout_minutes']
             if p.name=='agent-publish.yml': job['timeout-minutes']=m['execution']['publish_timeout_minutes']
             for step in job.get('steps',[]):
+                if p.name=='agent-build.yml' and step.get('name')=='Validate SAR-only WIF configuration':
+                    expected_wif={'WIF_REPOSITORY':repo,'WIF_RULE':a['production_rule_id'],'WIF_ORG':a['organization_id'],'WIF_ACCOUNT':a['service_account_id'],'WIF_WORKSPACE':a['workspace_id']}
+                    step['run']="python - <<'PY'\nimport os\nexpected="+repr(expected_wif)+"\nassert all(os.environ.get(k)==v for k,v in expected.items()), 'project WIF configuration mismatch'\nPY"
+                    step['name']='Validate exact project WIF configuration'
                 if step.get('uses','').startswith('anthropics/'):
                     step['with']['claude_args']+=' --model '+a['models'][0]
                     settings=json.loads(step['with']['settings'])
@@ -147,7 +161,7 @@ def render_project(m):
     out['CLAUDE.md']='# Builder constraints\n\nFollow the approved issue, pinned project policy and PROJECT_AGENT_CONFIG.md. Never push, publish, merge or modify protected controls.\n'
     out['scripts/validate_bootstrap_runtime.py']='''from pathlib import Path\nimport sys\nsys.path.insert(0,str(Path(__file__).resolve().parent/'orchestration'))\nfrom control import policy\nfrom budget import config\npolicy();config();print('PASS: exact rendered policy and budget contract; activation remains blocked.')\n'''
     out['tests/test_bootstrap_runtime.py']='''import unittest\nfrom scripts.orchestration.control import policy,review_ok,Blocked\nfrom scripts.orchestration.budget import BudgetBlocked,live_gate\nclass BootstrapRuntimeTests(unittest.TestCase):\n def test_terminal_policy(self):\n  p=policy();self.assertEqual(p['max_correction_cycles'],3);self.assertFalse(p['automatic_merge']);self.assertFalse(p['automatic_issue_closure'])\n def test_final_blocker(self):\n  with self.assertRaises(Blocked):review_ok({'status':'BLOCKERS','reviewed_sha':'a'*40,'blockers':['unresolved'],'important':[],'follow_up':[],'summary':'blocked'},'a'*40,True)\n'''
-    out['docs/orchestration/BOOTSTRAP_CHECKLIST.md']=source('../BOOTSTRAP_CHECKLIST.md') if False else (BUNDLE.parent/'BOOTSTRAP_CHECKLIST.md').read_text()
+    out['docs/orchestration/BOOTSTRAP_CHECKLIST.md']=source('templates/BOOTSTRAP_CHECKLIST.md')
     out['docs/orchestration/readiness.json']=dump({'status':'BLOCKED','activation':'disabled','live_meter':'UNAVAILABLE','isolation':'UNVERIFIED','authentication':'NOT RUN','integration_smoke':'NOT RUN'})
     out['bootstrap-runtime.json']=dump({'template_version':'0.1.0','template_commit':m['bootstrap']['commit'],'bundle_sha256':m['bootstrap']['bundle_sha256'],'generated_files':{n:hashlib.sha256(t.encode()).hexdigest() for n,t in out.items() if n.startswith(('scripts/','.github/'))}})
     return out

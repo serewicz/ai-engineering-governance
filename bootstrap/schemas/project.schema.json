@@ -179,7 +179,7 @@
             "comment_id": {
               "type": "integer",
               "minimum": 1,
-              "maximum": 100000000
+              "maximum": 9223372036854775807
             },
             "sha256": {
               "type": "string",
@@ -220,7 +220,7 @@
             "comment_id": {
               "type": "integer",
               "minimum": 1,
-              "maximum": 100000000
+              "maximum": 9223372036854775807
             },
             "sha256": {
               "type": "string",
@@ -340,7 +340,7 @@
                 "comment_id": {
                   "type": "integer",
                   "minimum": 1,
-                  "maximum": 100000000
+                  "maximum": 9223372036854775807
                 },
                 "sha256": {
                   "type": "string",
@@ -423,7 +423,7 @@
                 "comment_id": {
                   "type": "integer",
                   "minimum": 1,
-                  "maximum": 100000000
+                  "maximum": 9223372036854775807
                 },
                 "sha256": {
                   "type": "string",
@@ -565,7 +565,8 @@
       "required": [
         "profile",
         "required_check",
-        "test_directory"
+        "test_directory",
+        "contract_packages"
       ],
       "properties": {
         "profile": {
@@ -576,6 +577,40 @@
         },
         "test_directory": {
           "const": "tests"
+        },
+        "contract_packages": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "standard",
+            "smoke"
+          ],
+          "properties": {
+            "standard": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 20,
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 200,
+                "pattern": "^tests/[A-Za-z0-9_-]+/$"
+              }
+            },
+            "smoke": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 20,
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 200,
+                "pattern": "^tests/[A-Za-z0-9_-]+/$"
+              }
+            }
+          }
         }
       }
     },
@@ -659,9 +694,9 @@
           "type": "array",
           "items": {
             "type": "string",
-            "minLength": 1,
-            "maxLength": 500,
-            "pattern": "^[A-Za-z0-9_-]+$"
+            "minLength": 2,
+            "maxLength": 100,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]+$"
           },
           "minItems": 1,
           "maxItems": 100,
@@ -706,9 +741,9 @@
         },
         "review_model": {
           "type": "string",
-          "minLength": 1,
-          "maxLength": 500,
-          "pattern": "^[A-Za-z0-9_-]+$"
+          "minLength": 2,
+          "maxLength": 100,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]+$"
         }
       }
     },
@@ -880,7 +915,7 @@
             "comment_id": {
               "type": "integer",
               "minimum": 1,
-              "maximum": 100000000
+              "maximum": 9223372036854775807
             },
             "sha256": {
               "type": "string",
@@ -945,7 +980,7 @@
                 "comment_id": {
                   "type": "integer",
                   "minimum": 1,
-                  "maximum": 100000000
+                  "maximum": 9223372036854775807
                 },
                 "sha256": {
                   "type": "string",

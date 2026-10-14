@@ -80,6 +80,10 @@ def validate(m):
         for p in group:
             canonical(p)
             need(not any(p.startswith(q) or q.startswith(p) for q in protected), 'ALLOW_PROTECTED_OVERLAP')
+    for scope,packages in m['ci']['contract_packages'].items():
+        for package in packages:
+            canonical(package)
+            need(any(package.startswith(root) for root in tasks[scope]['allowed_roots']), 'CONTRACT_TEST_SCOPE')
     need(not any(a.startswith(b) or b.startswith(a) for a in roots[0] for b in roots[1]), 'SMOKE_ROOT_OVERLAP')
     b=m['budget'];need(b['standard']['claude_cents']+b['standard']['codex_cents']<=b['standard']['combined_cents'], 'BUDGET_PARTS')
     need(b['smoke']['combined_cents']<=b['standard']['combined_cents'], 'SMOKE_BUDGET')
@@ -110,6 +114,7 @@ def compare(previous,current):
     need(previous['authorization']==current['authorization'], 'UPGRADE_SCOPE_OR_APPROVAL_CHANGE')
     need(previous['budget']==current['budget'], 'UPGRADE_BUDGET_CHANGE')
     need(previous['anthropic']==current['anthropic'] and previous['credentials']==current['credentials'], 'UPGRADE_TRUST_CHANGE')
+    need(previous['roles']==current['roles'] and previous['execution']==current['execution'] and previous['checkpoint']==current['checkpoint'] and previous['ci']==current['ci'] and previous['isolation']==current['isolation'], 'UPGRADE_EXECUTION_OR_REVIEW_CONTROL_CHANGE')
     need(previous['data']==current['data'] and previous['protection']==current['protection'], 'UPGRADE_RETAINED_CONTROLS_CHANGE')
 
 def source(name): return (BUNDLE/name).read_text()

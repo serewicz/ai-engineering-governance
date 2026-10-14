@@ -75,3 +75,5 @@ real positive/negative tests are required before enabling credentialed execution
 Read [authentication](docs/authentication.md), [credentials](docs/credentials.md),
 [budgets and isolation](docs/budgets-and-isolation.md), [troubleshooting](docs/troubleshooting.md)
 and [upgrades](docs/upgrades.md). Use the [Owner/Codex checklist](../BOOTSTRAP_CHECKLIST.md).
+
+Review hardening: real positive64-bit GitHub comment IDs are accepted; scoped code/contract presence requires explicitly declared discoverable contract packages with nonzero tests. Upgrade comparison refuses changed roles/execution/CI/isolation controls. Every rendered checklist input is inside the verified bundle. Exact compiled WIF identifiers are compared before Claude.

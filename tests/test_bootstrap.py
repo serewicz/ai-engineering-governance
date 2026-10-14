@@ -69,6 +69,27 @@ class BootstrapTests(unittest.TestCase):
    elif name=='agent-review.yml':self.assertNotIn('ENGINEERING_AUTOMATION_TOKEN',txt);self.assertNotIn('id-token',txt)
    else:self.assertNotIn('ENGINEERING_OPENAI_API_KEY',txt);self.assertNotIn('id-token',txt);self.assertNotIn('anthropics/',txt)
   auth=json.loads(f['.github/workflows/authentication-test.yml']);self.assertNotIn('secrets.',json.dumps(auth));self.assertNotIn('agent-build',json.dumps(auth));self.assertEqual(auth['jobs']['configuration']['permissions'],{'contents':'read'})
+ def test_real_comment_ids_strong_upgrade_and_contract_discovery(self):
+  m=manifest();m['governance']['adoption_approval']['comment_id']=6175413684;b.validate(m)
+  for group,key,value in [('roles','principal','different-reviewer'),('execution','build_timeout_minutes',89)]:
+   changed=copy.deepcopy(m);changed[group][key]=value
+   with self.assertRaises(b.Invalid):b.compare(m,changed)
+  with tempfile.TemporaryDirectory() as t:
+   root=Path(t)
+   for name,text in b.render(m).items():p=root/name;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(text)
+   (root/'src').mkdir()
+   command=[sys.executable,'-c',"from scripts.orchestration.control import test_suite;print(test_suite('.').countTestCases())"]
+   r=subprocess.run(command,cwd=root,capture_output=True,text=True);self.assertNotEqual(r.returncode,0);self.assertIn('contract package missing',r.stderr)
+   package=root/'tests/contracts';package.mkdir();(package/'__init__.py').write_text('')
+   r=subprocess.run(command,cwd=root,capture_output=True,text=True);self.assertNotEqual(r.returncode,0);self.assertIn('zero contract tests',r.stderr)
+   (package/'test_contract.py').write_text('import unittest\nclass Contract(unittest.TestCase):\n def test_real(self):self.assertTrue(True)\n')
+   r=subprocess.run(command,cwd=root,capture_output=True,text=True);self.assertEqual(r.returncode,0,r.stderr);self.assertGreaterEqual(int(r.stdout.strip()),3)
+ def test_every_render_input_is_inside_verified_bundle(self):
+  m=manifest()
+  inventory=b.load(B/'release-manifest.json')['files'];self.assertIn('templates/BOOTSTRAP_CHECKLIST.md',inventory)
+  # Top-level checklist is not consumed; modifying it cannot influence pinned output.
+  text=b.render(m)['docs/orchestration/BOOTSTRAP_CHECKLIST.md'];self.assertEqual(text,(B/'templates/BOOTSTRAP_CHECKLIST.md').read_text())
+  source=(B/'scripts/renderer.py').read_text();self.assertNotIn("BUNDLE.parent",source)
  def test_generated_execution_recovery_budget_and_signed_claim_regressions(self):
   # Run original adversarial reference cases against newly rendered fixture identities,
   # not original hard-coded controllers. No model or real exchange is involved.
