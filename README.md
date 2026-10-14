@@ -36,3 +36,10 @@ python3 scripts/validate_documents.py
 Checks cover the unchanged 77 classification scenarios plus merge-delegation positive/denial examples (including HarvestGuard human-only policy at every tier), required files, local Markdown link/anchor targets, candidate versions, project-specific merge authority, denial-path delegation scenarios and key cross-document invariants. Manual review covers semantic consistency, retained baseline controls, trigger boundaries, and adoption risks. External links are verified where needed through GitHub API inspection; the local validator does not claim to check remote availability. Independent review evidence and exact candidate SHA belong in the PR record. No v1.1.0 tag, release, adoption activation, live protection change, or artifact publication is authorized by this candidate.
 
 [Merge-delegation prerequisite examples](scripts/merge_delegation.py) and their [tests](tests/test_merge_delegation.py) evaluate supplied facts only. They do not authenticate authorization or review evidence, execute merges, grant credentials, or change project policy. Real execution requires independently verified evidence and enforceable project controls.
+
+## Disabled bootstrap candidate
+
+[Bootstrap0.1.0 design implementation](bootstrap/README.md) and
+[Owner/Codex checklist](BOOTSTRAP_CHECKLIST.md) provide offline manifest validation,
+versioned deterministic staging and blocked execution templates. No release, adoption
+or live activation is granted; upstream governance semantics remain unchanged.

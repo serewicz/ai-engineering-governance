@@ -1,0 +1,67 @@
+{
+  "name": "Governance and bootstrap CI",
+  "on": {
+    "pull_request": {
+      "branches": [
+        "main"
+      ]
+    },
+    "push": {
+      "branches": [
+        "main"
+      ]
+    }
+  },
+  "permissions": {
+    "contents": "read"
+  },
+  "jobs": {
+    "contracts": {
+      "name": "Governance and bootstrap (CPython 3.14)",
+      "runs-on": "macos-15",
+      "timeout-minutes": 15,
+      "steps": [
+        {
+          "uses": "actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "with": {
+            "persist-credentials": false,
+            "fetch-depth": 0
+          }
+        },
+        {
+          "uses": "actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065",
+          "with": {
+            "python-version": "3.14"
+          }
+        },
+        {
+          "name": "Contracts and reproducible evidence",
+          "run": "mkdir -p \"$RUNNER_TEMP/evidence\"\npython -VV > \"$RUNNER_TEMP/evidence/python.txt\"\npython -m unittest discover -s tests -v > \"$RUNNER_TEMP/evidence/unittest.txt\" 2>&1\npython scripts/validate_documents.py > \"$RUNNER_TEMP/evidence/governance.txt\"\npython bootstrap/scripts/verify_bundle.py > \"$RUNNER_TEMP/evidence/bundle.txt\"",
+          "env": {
+            "PYTHONPYCACHEPREFIX": "${{ runner.temp }}/bootstrap-bytecode"
+          }
+        },
+        {
+          "name": "Committed whitespace",
+          "run": "git diff --check \"$BASE_SHA\" \"$HEAD_SHA\"",
+          "if": "github.event_name == 'pull_request'",
+          "env": {
+            "BASE_SHA": "${{ github.event.pull_request.base.sha }}",
+            "HEAD_SHA": "${{ github.event.pull_request.head.sha }}"
+          }
+        },
+        {
+          "name": "Evidence",
+          "if": "always()",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "name": "bootstrap-ci-${{ github.sha }}",
+            "path": "${{ runner.temp }}/evidence",
+            "retention-days": 14,
+            "if-no-files-found": "error"
+          }
+        }
+      ]
+    }
+  }
+}

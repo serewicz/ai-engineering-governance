@@ -1,0 +1,115 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "repository",
+    "activation",
+    "ready_to_execute",
+    "exact_monetary_cap_claimed",
+    "checks",
+    "render_sha256",
+    "manifest_sha256",
+    "governance_pin",
+    "bootstrap_pin"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "repository": {
+      "type": "string"
+    },
+    "activation": {
+      "const": "disabled"
+    },
+    "ready_to_execute": {
+      "const": false
+    },
+    "exact_monetary_cap_claimed": {
+      "const": false
+    },
+    "render_sha256": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "checks": {
+      "type": "array",
+      "minItems": 18,
+      "maxItems": 18,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "responsibility",
+          "status",
+          "reason",
+          "evidence"
+        ],
+        "properties": {
+          "id": {
+            "enum": [
+              "B01",
+              "B02",
+              "B03",
+              "B04",
+              "B05",
+              "B06",
+              "B07",
+              "B08",
+              "B09",
+              "B10",
+              "B11",
+              "B12",
+              "B13",
+              "B14",
+              "B15",
+              "B16",
+              "B17",
+              "B18"
+            ]
+          },
+          "responsibility": {
+            "enum": [
+              "Owner",
+              "Codex"
+            ]
+          },
+          "status": {
+            "enum": [
+              "PASS",
+              "FAIL",
+              "BLOCKED",
+              "NOT RUN"
+            ]
+          },
+          "reason": {
+            "type": "string"
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "manifest_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "governance_pin": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "bootstrap_pin": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    }
+  }
+}

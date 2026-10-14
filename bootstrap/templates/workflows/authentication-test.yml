@@ -1,0 +1,120 @@
+{
+  "name": "SAR authentication-only WIF test",
+  "on": {
+    "workflow_dispatch": {}
+  },
+  "permissions": {
+    "contents": "read"
+  },
+  "concurrency": {
+    "group": "sar-wif-auth-only",
+    "cancel-in-progress": false
+  },
+  "jobs": {
+    "configuration": {
+      "runs-on": "ubuntu-latest",
+      "timeout-minutes": 5,
+      "permissions": {
+        "contents": "read"
+      },
+      "env": {
+        "SAR_ANTHROPIC_ORGANIZATION_ID": "${{ vars.SAR_ANTHROPIC_ORGANIZATION_ID }}",
+        "SAR_ANTHROPIC_WORKSPACE_ID": "${{ vars.SAR_ANTHROPIC_WORKSPACE_ID }}",
+        "SAR_ANTHROPIC_SERVICE_ACCOUNT_ID": "${{ vars.SAR_ANTHROPIC_SERVICE_ACCOUNT_ID }}",
+        "SAR_ANTHROPIC_FEDERATION_RULE_ID": "${{ vars.SAR_ANTHROPIC_FEDERATION_RULE_ID }}",
+        "SAR_WIF_REPOSITORY": "${{ vars.SAR_WIF_REPOSITORY }}",
+        "SAR_ORCHESTRATION_ENABLED": "${{ vars.SAR_ORCHESTRATION_ENABLED }}"
+      },
+      "steps": [
+        {
+          "name": "Checkout immutable workflow source",
+          "uses": "actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "with": {
+            "ref": "${{ github.sha }}",
+            "persist-credentials": false
+          }
+        },
+        {
+          "name": "CPython 3.14",
+          "uses": "actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065",
+          "with": {
+            "python-version": "3.14"
+          }
+        },
+        {
+          "name": "Validate configuration without requesting tokens",
+          "run": "python scripts/orchestration/wif_auth_test.py config",
+          "env": {
+            "RUN_DATA": "${{ runner.temp }}/wif-evidence"
+          }
+        },
+        {
+          "name": "Fixed nonsecret authentication evidence",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "if": "always()",
+          "with": {
+            "name": "wif-${{ github.job }}-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "${{ runner.temp }}/wif-evidence/wif-auth-result.json",
+            "retention-days": 14,
+            "if-no-files-found": "warn"
+          }
+        }
+      ]
+    },
+    "authentication": {
+      "runs-on": "ubuntu-latest",
+      "timeout-minutes": 5,
+      "permissions": {
+        "contents": "read",
+        "id-token": "write"
+      },
+      "env": {
+        "SAR_ANTHROPIC_ORGANIZATION_ID": "${{ vars.SAR_ANTHROPIC_ORGANIZATION_ID }}",
+        "SAR_ANTHROPIC_WORKSPACE_ID": "${{ vars.SAR_ANTHROPIC_WORKSPACE_ID }}",
+        "SAR_ANTHROPIC_SERVICE_ACCOUNT_ID": "${{ vars.SAR_ANTHROPIC_SERVICE_ACCOUNT_ID }}",
+        "SAR_ANTHROPIC_FEDERATION_RULE_ID": "${{ vars.SAR_ANTHROPIC_FEDERATION_RULE_ID }}",
+        "SAR_WIF_REPOSITORY": "${{ vars.SAR_WIF_REPOSITORY }}",
+        "SAR_ORCHESTRATION_ENABLED": "${{ vars.SAR_ORCHESTRATION_ENABLED }}"
+      },
+      "steps": [
+        {
+          "name": "Checkout immutable workflow source",
+          "uses": "actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "with": {
+            "ref": "${{ github.sha }}",
+            "persist-credentials": false
+          }
+        },
+        {
+          "name": "CPython 3.14",
+          "uses": "actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065",
+          "with": {
+            "python-version": "3.14"
+          }
+        },
+        {
+          "name": "Signed OIDC claims and exchange only",
+          "run": "python scripts/orchestration/wif_auth_test.py auth",
+          "env": {
+            "RUN_DATA": "${{ runner.temp }}/wif-evidence"
+          }
+        },
+        {
+          "name": "Fixed nonsecret authentication evidence",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "if": "always()",
+          "with": {
+            "name": "wif-${{ github.job }}-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "${{ runner.temp }}/wif-evidence/wif-auth-result.json",
+            "retention-days": 14,
+            "if-no-files-found": "warn"
+          }
+        }
+      ],
+      "needs": [
+        "configuration"
+      ],
+      "if": "github.repository == 'serewicz/sar-tracker' && github.ref == 'refs/heads/main' && github.event_name == 'workflow_dispatch' && vars.SAR_ORCHESTRATION_ENABLED == 'false'"
+    }
+  }
+}

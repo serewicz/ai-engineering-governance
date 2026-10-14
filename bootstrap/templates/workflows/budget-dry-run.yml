@@ -1,0 +1,51 @@
+{
+  "name": "SAR offline budget dry run",
+  "on": {
+    "workflow_dispatch": {}
+  },
+  "permissions": {
+    "contents": "read"
+  },
+  "jobs": {
+    "dry_run": {
+      "runs-on": "ubuntu-latest",
+      "timeout-minutes": 5,
+      "permissions": {
+        "contents": "read"
+      },
+      "steps": [
+        {
+          "name": "Checkout immutable source",
+          "uses": "actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "with": {
+            "persist-credentials": false
+          }
+        },
+        {
+          "name": "CPython 3.14",
+          "uses": "actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065",
+          "with": {
+            "python-version": "3.14"
+          }
+        },
+        {
+          "name": "Offline synthetic budget checks only",
+          "run": "python -m unittest discover -s tests -p test_budget.py -v\npython scripts/orchestration/budget.py dry-run",
+          "env": {
+            "RUN_DATA": "${{ runner.temp }}/budget-dry-run"
+          }
+        },
+        {
+          "name": "Safe offline status",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "if": "always()",
+          "with": {
+            "name": "offline-budget-status",
+            "path": "${{ runner.temp }}/budget-dry-run/budget-report.json",
+            "retention-days": 14
+          }
+        }
+      ]
+    }
+  }
+}

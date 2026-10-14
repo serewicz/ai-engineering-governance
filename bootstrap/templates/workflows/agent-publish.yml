@@ -1,0 +1,181 @@
+{
+  "name": "Deterministic patch publisher",
+  "on": {
+    "workflow_call": {
+      "inputs": {
+        "control_sha": {
+          "type": "string",
+          "required": true
+        },
+        "base_sha": {
+          "type": "string",
+          "required": true
+        },
+        "branch": {
+          "type": "string",
+          "required": true
+        },
+        "pr_number": {
+          "type": "string",
+          "required": true
+        },
+        "cycle": {
+          "type": "number",
+          "required": true
+        },
+        "prior_cycle": {
+          "type": "number",
+          "required": true
+        }
+      },
+      "secrets": {
+        "SAR_AUTOMATION_TOKEN": {
+          "required": true
+        }
+      },
+      "outputs": {
+        "candidate_sha": {
+          "value": "${{ jobs.publish.outputs.candidate_sha }}"
+        },
+        "pr_number": {
+          "value": "${{ jobs.publish.outputs.pr_number }}"
+        }
+      }
+    }
+  },
+  "permissions": {
+    "contents": "read",
+    "issues": "read",
+    "pull-requests": "read"
+  },
+  "jobs": {
+    "publish": {
+      "runs-on": "ubuntu-latest",
+      "timeout-minutes": 10,
+      "permissions": {
+        "contents": "read",
+        "issues": "read",
+        "pull-requests": "read"
+      },
+      "env": {
+        "GH_TOKEN": "${{ github.token }}",
+        "ISSUE_NUMBER": "7",
+        "CONTROL_SHA": "${{ inputs.control_sha }}",
+        "BASE_SHA": "${{ inputs.base_sha }}",
+        "CYCLE": "${{ inputs.cycle }}",
+        "BRANCH": "${{ inputs.branch }}",
+        "PR_NUMBER": "${{ inputs.pr_number }}",
+        "CANDIDATE": "${{ github.workspace }}",
+        "ENABLED": "${{ vars.SAR_ORCHESTRATION_ENABLED }}",
+        "AUTHORIZATION_ID": "${{ vars.SAR_AUTHORIZATION_COMMENT_ID }}"
+      },
+      "outputs": {
+        "candidate_sha": "${{ steps.apply.outputs.candidate_sha }}",
+        "pr_number": "${{ steps.publish.outputs.pr_number }}"
+      },
+      "steps": [
+        {
+          "name": "Initialize isolated run paths",
+          "run": "echo \"RUN_DATA=$RUNNER_TEMP/run-data\" >> \"$GITHUB_ENV\"\necho \"ARTIFACT=$RUNNER_TEMP/patch-artifact\" >> \"$GITHUB_ENV\""
+        },
+        {
+          "name": "Checkout immutable source",
+          "uses": "actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "with": {
+            "ref": "${{ inputs.control_sha }}",
+            "persist-credentials": false,
+            "fetch-depth": 0,
+            "path": ".control"
+          }
+        },
+        {
+          "name": "Move trusted control outside candidate tree",
+          "run": "mv \"$GITHUB_WORKSPACE/.control\" \"$RUNNER_TEMP/control\""
+        },
+        {
+          "name": "CPython 3.14",
+          "uses": "actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065",
+          "with": {
+            "python-version": "3.14"
+          }
+        },
+        {
+          "name": "Fail-closed task budget admission",
+          "run": "python ${{ runner.temp }}/control/scripts/orchestration/budget.py gate",
+          "env": {
+            "BUDGET_ROLE": "publish"
+          }
+        },
+        {
+          "name": "Revalidate current issue authorization and main control SHA",
+          "run": "python ${{ runner.temp }}/control/scripts/orchestration/control.py gate"
+        },
+        {
+          "name": "Checkout immutable source",
+          "uses": "actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "with": {
+            "ref": "${{ inputs.base_sha }}",
+            "persist-credentials": false,
+            "fetch-depth": 0
+          }
+        },
+        {
+          "name": "Verify draft head before correction",
+          "run": "python ${{ runner.temp }}/control/scripts/orchestration/control.py head",
+          "if": "inputs.cycle > 0"
+        },
+        {
+          "name": "Download builder artifact",
+          "uses": "actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093",
+          "with": {
+            "name": "claude-patch-${{ inputs.cycle }}",
+            "path": "${{ runner.temp }}/patch-artifact"
+          }
+        },
+        {
+          "name": "Validate and apply patch; commit without hooks",
+          "run": "python ${{ runner.temp }}/control/scripts/orchestration/control.py apply",
+          "id": "apply"
+        },
+        {
+          "name": "Publish exact head and create draft PR only on cycle zero",
+          "run": "set -euo pipefail\nif [ -z \"$AUTOMATION_TOKEN\" ]; then exit 1; fi\n# Token is used only by askpass and GitHub API in this deterministic step.\nASKPASS=\"$RUNNER_TEMP/sar-askpass.sh\"\ncat > \"$ASKPASS\" <<'SH'\n#!/bin/sh\ncase \"$1\" in *Username*) printf '%s\\n' x-access-token;; *) printf '%s\\n' \"$AUTOMATION_TOKEN\";; esac\nSH\nchmod 700 \"$ASKPASS\"\nexport GIT_ASKPASS=\"$ASKPASS\" GIT_TERMINAL_PROMPT=0\ntrap 'rm -f \"$ASKPASS\"' EXIT\nif [ \"$CYCLE\" = 0 ]; then\n  test -z \"$(git ls-remote origin \"refs/heads/$BRANCH\")\"\nelse\n  test \"$(git ls-remote origin \"refs/heads/$BRANCH\" | cut -f1)\" = \"$BASE_SHA\"\nfi\ngit -c core.hooksPath=/dev/null push origin \"HEAD:refs/heads/$BRANCH\"\nif [ \"$CYCLE\" = 0 ]; then\n  GH_TOKEN=\"$AUTOMATION_TOKEN\" gh pr create --repo serewicz/sar-tracker --draft --base main --head \"$BRANCH\" --title 'A1: bounded issue 7 implementation' --body 'Relates to #7. Automated draft only. Exact-SHA Principal and independent designated A1 Security QA plus Tim approval required. No merge or closure authorization.' > \"$RUNNER_TEMP/pr-url\"\n  GH_TOKEN=\"$AUTOMATION_TOKEN\" gh pr view \"$(cat \"$RUNNER_TEMP/pr-url\")\" --repo serewicz/sar-tracker --json number --jq .number > \"$RUNNER_TEMP/pr-number\"\n  printf 'pr_number=%s\\n' \"$(cat \"$RUNNER_TEMP/pr-number\")\" >> \"$GITHUB_OUTPUT\"\nelse\n  echo \"pr_number=$PR_NUMBER\" >> \"$GITHUB_OUTPUT\"\nfi",
+          "id": "publish",
+          "env": {
+            "AUTOMATION_TOKEN": "${{ secrets.SAR_AUTOMATION_TOKEN }}"
+          }
+        },
+        {
+          "name": "Preserve safe diagnostics",
+          "run": "python ${{ runner.temp }}/control/scripts/orchestration/control.py diagnostics",
+          "if": "always()",
+          "env": {
+            "JOB_STATUS": "${{ job.status }}"
+          }
+        },
+        {
+          "name": "Upload safe diagnostics",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "name": "publisher-diagnostics-${{ inputs.cycle }}",
+            "path": "${{ runner.temp }}/run-data/diagnostics.json",
+            "retention-days": 14,
+            "if-no-files-found": "warn"
+          },
+          "if": "always()"
+        },
+        {
+          "name": "Safe budget status evidence",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "if": "always()",
+          "with": {
+            "name": "budget-publish-${{ inputs.cycle }}",
+            "path": "${{ runner.temp }}/run-data/budget-report.json",
+            "retention-days": 14,
+            "if-no-files-found": "warn"
+          }
+        }
+      ]
+    }
+  }
+}
